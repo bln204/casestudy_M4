@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kirik Store</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/Styles.css}">
+    <link rel="icon" type="image/x-icon" th:href="@{/images/logo.png}">
+    <style>
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+        .card {
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav class="menu">
+        <div class="logo">Kirik Store</div>
+        <ul>
+            <li><a href="/">Trang chủ</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle">Sản phẩm</a>
+                <ul class="dropdown-menu">
+                    <li><a href="?category=Phụ kiện">Phụ kiện</a></li>
+                    <li><a href="?category=Túi xách">Túi xách</a></li>
+                    <li><a href="?category=Giày nữ">Giày nữ</a></li>
+                    <li><a href="?category=Mắt kính">Mắt kính</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Danh mục</a></li>
+            <li><a href="#">Ưu đãi</a></li>
+            <li><a href="#">Liên hệ</a></li>
+        </ul>
+        <div class="search-bar">
+            <form th:action="@{/search}" method="get" class="d-flex flex-wrap gap-2">
+                <select name="category" class="form-select" style="width: 200px;">
+                    <option value="">Chọn danh mục</option>
+                    <option th:each="category : ${categories}" th:value="${category.name}" th:text="${category.name}"></option>
+                </select>
+                <input type="number" name="minPrice" class="form-control" placeholder="Giá tối thiểu" style="width: 150px;">
+                <input type="number" name="maxPrice" class="form-control" placeholder="Giá tối đa" style="width: 150px;">
+                <select name="size" class="form-select" style="width: 100px;">
+                    <option value="">Kích cỡ</option>
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                    <option value="XL">XL</option>
+                </select>
+                <button type="submit" class="search-button">Tìm</button>
+            </form>
+        </div>
+        <div class="cart-icon">
+            <a href="/cart"><i class="fas fa-shopping-cart"></i></a>
+        </div>
+    </nav>
+    <div class="hero">
+<!--        <img th:src="@{/images/banner.jpg}" class="hero-image" alt="Banner">-->
+        <h1>Khám phá phong cách của bạn!</h1>
+        <p>Thời trang trẻ trung, năng động cho thế hệ mới.</p>
+        <a href="#products" class="main-button btn btn-primary">Khám phá ngay</a>
+    </div>
+</header>
+
+<main>
+    <section class="products" id="products">
+        <h2>Sản phẩm</h2>
+        <div th:if="${error}" class="alert alert-danger text-center" th:text="${error}"></div>
+        <div th:if="${clothings.isEmpty()}" class="alert alert-warning text-center">
+            Không tìm thấy sản phẩm nào.
+        </div>
+
+        <div class="product-grid row row-cols-1 g-4">
+            <div th:each="clothing : ${clothings}" class="col">
+                <div class="product card h-100 shadow-sm">
+                    <div class="product-image">
+                        <img th:src="${clothing.imageUrl} ?: '/images/default.jpg'" class="card-img-top" alt="Clothing">
+                    </div>
+                    <h4 th:text="${clothing.name}"></h4>
+                    <p th:text="${#numbers.formatDecimal(clothing.price, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"></p>
+                    <div class="button-group">
+                        <form th:action="@{/add-to-cart}" method="post" class="d-flex align-items-center">
+                            <input type="hidden" name="clothingId" th:value="${clothing.id}">
+                            <input type="number" name="quantity" value="1" min="1" class="form-control me-2" style="width: 80px;">
+                            <button type="submit" class="add-to-cart btn btn-success"><i class="fas fa-shopping-cart"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <h2>Ưu đãi đặc biệt</h2>
+        <p>Giảm giá 20% cho đơn hàng đầu tiên! Nhanh tay kẻo lỡ!</p>
+        <div class="countdown">
+            <span id="days">00</span> ngày
+            <span id="hours">00</span> giờ
+            <span id="minutes">00</span> phút
+            <span id="seconds">00</span> giây
+        </div>
+        <button class="footer-button">Nhận ưu đãi ngay</button>
+        <div class="cta-image"></div>
+    </section>
+
+    <footer>
+        <div class="footer-container">
+            <!-- Các footer-section hiện có giữ nguyên -->
+            <div class="footer-section">
+                <h3>The Kirik Shop</h3>
+                <p>Thời trang trẻ trung, năng động cho thế hệ mới.</p>
+                <div class="social-links">
+                    <a href="#" class="social-icon">FB</a>
+                    <a href="#" class="social-icon">IG</a>
+                    <a href="#" class="social-icon">TW</a>
+                    <a href="#" class="social-icon">YT</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Liên kết nhanh</h3>
+                <ul>
+                    <li><a href="#">Chính sách đổi trả</a></li>
+                    <li><a href="#">Hướng dẫn mua hàng</a></li>
+                    <li><a href="#">Câu hỏi thường gặp</a></li>
+                    <li><a href="#">Liên hệ</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Thông tin liên hệ</h3>
+                <p>Email: thekirik@gmailgmail.com</p>
+                <p>Hotline: 0394 786 578</p>
+                <p>Địa chỉ: 30/4 Thống Nhất, Quận 1, TP. Hồ Chí Minh</p>
+            </div>
+            <div class="footer-section newsletter">
+                <h3>Đăng ký nhận tin</h3>
+                <p>Nhận ưu đãi và thông tin mới nhất!</p>
+                <input type="email" placeholder="Enter your email">
+                <button class="newsletter-button">Đăng ký</button>
+            </div>
+            <!-- Thêm phần Hình thức thanh toán -->
+            <div class="footer-section payment-methods">
+                <h3>Hình thức thanh toán</h3>
+                <div class="payment-icons">
+                    <i class="fab fa-cc-visa payment-icon"></i>
+                    <i class="fab fa-cc-mastercard payment-icon"></i>
+                    <i class="fab fa-paypal payment-icon"></i>
+                    <i class="fas fa-truck payment-icon"></i>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 The Kirik Shop. All rights reserved.</p>
+        </div>
+    </footer>
+</main>
+
+
+<script>
+    function countdown() {
+        const endDate = new Date("August 7, 2025 23:59:59").getTime();
+        const now = new Date().getTime();
+        const distance = endDate - now;
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById("days").textContent = days < 10 ? "0" + days : days;
+        document.getElementById("hours").textContent = hours < 10 ? "0" + hours : hours;
+        document.getElementById("minutes").textContent = minutes < 10 ? "0" + minutes : minutes;
+        document.getElementById("seconds").textContent = seconds < 10 ? "0" + seconds : seconds;
+
+        if (distance < 0) {
+            clearInterval(timer);
+            document.querySelector(".countdown").textContent = "Ưu đãi đã kết thúc!";
+        }
+    }
+
+    const timer = setInterval(countdown, 1000);
+</script>
+</body>
+</html>
