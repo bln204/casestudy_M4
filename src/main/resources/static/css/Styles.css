@@ -57,12 +57,14 @@ body {
     background-color: black; /* Màu của thanh gạch, trùng với màu chữ khi hover */
     bottom: 0; /* Đặt thanh gạch dưới chữ */
     left: 50%; /* Bắt đầu từ giữa */
-    transform: translateX(-50%); /* Căn giữa thanh gạch */
+    transform: translateX(-50%);
+    opacity: 0;/* Căn giữa thanh gạch */
     transition: width 0.3s ease; /* Hiệu ứng mở rộng mượt mà */
 }
 
 .menu ul li a:hover::after {
-    width: 50%; /* Mở rộng thanh gạch khi hover */
+    width: 50%;
+    opacity: 1;/* Mở rộng thanh gạch khi hover */
 }
 
 /* Đảm bảo dropdown không bị ảnh hưởng bởi thanh gạch */
@@ -213,6 +215,8 @@ body {
 
 .products {
     padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .products h2 {
@@ -225,6 +229,8 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
+    max-width: 100%;
+    margin: 0 auto;
 }
 
 .product {
@@ -237,6 +243,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    align-items: center;
 }
 
 .product:hover {
@@ -287,6 +294,36 @@ body {
     width: 60px;
     border: 1px solid #ccc;
     border-radius: 4px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.pagination-button {
+    background-color: transparent;
+    color: #333333;
+    border: 1px solid #333333;
+    padding: 8px 16px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+}
+
+.pagination-button:hover {
+    background-color: black;
+    color: #FFFFFF;
+    transform: scale(1.05);
+}
+
+.pagination span {
+    font-size: 1em;
+    color: #333333;
 }
 
 .alert {
