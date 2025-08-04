@@ -91,7 +91,7 @@ body {
     list-style: none;
     padding: 10px 0;
     margin: 0;
-    min-width: 150px;
+    min-width: 95px;
     z-index: 1000;
 }
 
@@ -140,9 +140,34 @@ body {
     cursor: pointer;
 }
 
+.cart-icon {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
 .cart-icon a {
     color: #333;
-    font-size: 24px;
+    font-size: 20px;
+    text-decoration: none;
+}
+
+.cart-icon .navbar__icon--user {
+    font-size: 20px;
+    color: #333;
+}
+
+.cart-icon .btn-outline-secondary {
+    padding: 5px 10px;
+    font-size: 16px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cart-icon .btn-outline-secondary i {
+    font-size: 20px;
 }
 
 .hero {

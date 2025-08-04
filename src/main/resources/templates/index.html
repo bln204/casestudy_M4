@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -58,27 +58,22 @@
                 </select>
                 <button type="submit" class="search-button">Tìm</button>
             </form>
-            <!-- Form tìm kiếm -->
-<!--            <form th:action="@{/search}" method="get" class="search-form advanced">-->
-<!--                <input type="number" name="minPrice" th:value="${param.minPrice}" placeholder="Min Price"/>-->
-<!--                <input type="number" name="maxPrice" th:value="${param.maxPrice}" placeholder="Max Price"/>-->
-<!--                <select name="category">-->
-<!--                    <option value="">All Categories</option>-->
-<!--                    <option th:each="cat : ${categories}" th:value="${cat.name}" th:text="${cat.name}"-->
-<!--                            th:selected="${cat.name == param.category}"></option>-->
-<!--                </select>-->
-<!--                <input type="text" name="size" th:value="${param.size}" placeholder="Size"/>-->
-<!--                <input type="hidden" name="page" value="0"/>-->
-<!--                <input type="hidden" name="size" th:value="${clothings.size}"/>-->
-<!--                <button type="submit" class="search-button">Search</button>-->
-<!--            </form>-->
         </div>
         <div class="cart-icon">
-            <a href="/cart"><i class="fas fa-shopping-cart"></i></a>
+            <a th:href="@{/cart}"><i class="fas fa-shopping-cart"></i></a>
+            <div sec:authorize="isAuthenticated()">
+                <form th:action="@{/logout}" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-outline-secondary"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+                </form>
+            </div>
+            <div sec:authorize="isAnonymous()">
+                <a th:href="@{/login}" class="navbar__icon navbar__icon--user">
+                    <i class="fa-solid fa-circle-user"></i>
+                </a>
+            </div>
         </div>
     </nav>
     <div class="hero">
-<!--        <img th:src="@{/images/banner.jpg}" class="hero-image" alt="Banner">-->
         <h1>Khám phá phong cách của bạn!</h1>
         <p>Thời trang trẻ trung, năng động cho thế hệ mới.</p>
         <a href="#products" class="main-button btn btn-primary">Khám phá ngay</a>
@@ -92,12 +87,11 @@
         <div th:if="${clothings.isEmpty()}" class="alert alert-warning text-center">
             Không tìm thấy sản phẩm nào.
         </div>
-
         <div class="product-grid row row-cols-1 g-4">
             <div th:each="clothing : ${clothings}" class="col">
                 <div class="product card h-100 shadow-sm">
                     <div class="product-image">
-                        <img th:src="${clothing.imageUrl} ?: '/images/default.jpg'" class="card-img-top" alt="Clothing">
+                        <img th:src="${clothing.imageUrl} ?: '/static/images/default.jpg'" class="card-img-top" alt="Clothing">
                     </div>
                     <h4 th:text="${clothing.name}"></h4>
                     <p th:text="${#numbers.formatDecimal(clothing.price, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"></p>
@@ -111,10 +105,8 @@
                 </div>
             </div>
         </div>
-        <!-- Phân trang -->
         <div th:if="${clothings.totalPages > 1}" class="pagination">
             <th:block th:if="${isSearch}">
-                <!-- Phân trang cho tìm kiếm -->
                 <a th:if="${clothings.hasPrevious()}"
                    th:href="@{/search(page=${clothings.number - 1}, size=${clothings.size},
                                      minPrice=${param.minPrice != null and param.minPrice != ''} ? ${param.minPrice},
@@ -132,7 +124,6 @@
                    class="pagination-button">Sau</a>
             </th:block>
             <th:block th:unless="${isSearch}">
-                <!-- Phân trang cho trang chủ -->
                 <a th:if="${clothings.hasPrevious()}"
                    th:href="@{/(page=${clothings.number - 1}, size=${clothings.size})}"
                    class="pagination-button">Trước</a>
@@ -159,7 +150,6 @@
 
     <footer>
         <div class="footer-container">
-            <!-- Các footer-section hiện có giữ nguyên -->
             <div class="footer-section">
                 <h3>The Kirik Shop</h3>
                 <p>Thời trang trẻ trung, năng động cho thế hệ mới.</p>
@@ -181,7 +171,7 @@
             </div>
             <div class="footer-section">
                 <h3>Thông tin liên hệ</h3>
-                <p>Email: thekirik@gmailgmail.com</p>
+                <p>Email: thekirik@gmail.com</p>
                 <p>Hotline: 0394 786 578</p>
                 <p>Địa chỉ: 30/4 Thống Nhất, Quận 1, TP. Hồ Chí Minh</p>
             </div>
@@ -191,7 +181,6 @@
                 <input type="email" placeholder="Enter your email">
                 <button class="newsletter-button">Đăng ký</button>
             </div>
-            <!-- Thêm phần Hình thức thanh toán -->
             <div class="footer-section payment-methods">
                 <h3>Hình thức thanh toán</h3>
                 <div class="payment-icons">
@@ -207,7 +196,6 @@
         </div>
     </footer>
 </main>
-
 
 <script>
     function countdown() {

@@ -1,0 +1,165 @@
+<body><!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập & Đăng ký - Kirik Store</title>
+    <link rel="stylesheet" href="/css/login.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/Label__2.css">
+    <link rel="stylesheet" th:href="@{/css/Styles.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+<header>
+    <nav class="menu">
+        <div class="logo">Kirik Store</div>
+        <ul>
+            <li><a href="/">Trang chủ</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle">Sản phẩm</a>
+                <ul class="dropdown-menu">
+                    <li><a href="?category=Phụ kiện">Phụ kiện</a></li>
+                    <li><a href="?category=Túi xách">Túi xách</a></li>
+                    <li><a href="?category=Giày nữ">Giày nữ</a></li>
+                    <li><a href="?category=Mắt kính">Mắt kính</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Danh mục</a></li>
+            <li><a href="#">Ưu đãi</a></li>
+            <li><a href="#">Liên hệ</a></li>
+        </ul>
+        <div class="cart-icon">
+            <a th:href="@{/cart}"><i class="fas fa-shopping-cart"></i></a>
+            <div sec:authorize="isAuthenticated()">
+                <form th:action="@{/logout}" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-outline-secondary"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+                </form>
+            </div>
+            <div sec:authorize="isAnonymous()">
+                <a th:href="@{/login}" class="navbar__icon navbar__icon--user">
+                    <i class="fa-solid fa-circle-user"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<section class="form-login">
+    <div class="container">
+        <div class="box">
+            <div class="form sign_in">
+                <h3>Đăng nhập</h3>
+                <span>Hoặc sử dụng tài khoản của bạn</span>
+                <div th:if="${param.error}" class="alert alert-danger">
+                    Email hoặc mật khẩu không đúng.
+                </div>
+                <div th:if="${param.signupSuccess}" class="alert alert-success">
+                    Đăng ký thành công! Vui lòng đăng nhập.
+                </div>
+                <div th:if="${param.logout}" class="alert alert-success">
+                    Đăng xuất thành công!
+                </div>
+                <form th:action="@{/login}" method="post" id="form_input">
+                    <div class="type">
+                        <input type="email" name="username" id="email_signin" placeholder="Email" required>
+                    </div>
+                    <div class="type">
+                        <input type="password" name="password" id="password_signin" placeholder="Mật khẩu" required>
+                    </div>
+                    <div class="forgot">
+                        <a href="#">Quên mật khẩu?</a>
+                    </div>
+                    <button type="submit" class="btn bkg">Đăng nhập</button>
+                </form>
+            </div>
+
+            <div class="form sign_up">
+                <h3>Đăng ký</h3>
+                <span>Hoặc sử dụng email để đăng ký</span>
+                <div th:if="${signupError}" class="alert alert-danger" th:text="${signupError}"></div>
+                <form th:action="@{/signup}" method="post" id="form_input">
+                    <div class="type">
+                        <input type="text" name="name" id="name" placeholder="Họ và tên" required>
+                    </div>
+                    <div class="type">
+                        <input type="email" name="email" id="email_signup" placeholder="Email" required>
+                    </div>
+                    <div class="type">
+                        <input type="password" name="password" id="password_signup" placeholder="Mật khẩu" required>
+                    </div>
+                    <button type="submit" class="btn bkg">Đăng ký</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="overlay">
+            <div class="page page_signIn">
+                <h3>Chào mừng bạn trở lại!</h3>
+                <p>Vui lòng đăng nhập để tiếp tục mua sắm</p>
+                <button class="btn btnSign-in">Đăng ký <i class="bi bi-arrow-right"></i></button>
+            </div>
+            <div class="page page_signUp">
+                <h3>Xin chào!</h3>
+                <p>Đăng ký để bắt đầu hành trình mua sắm</p>
+                <button class="btn btnSign-up"><i class="bi bi-arrow-left"></i> Đăng nhập</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<footer>
+    <div class="footer-container">
+        <!-- Các footer-section hiện có giữ nguyên -->
+        <div class="footer-section">
+            <h3>The Kirik Shop</h3>
+            <p>Thời trang trẻ trung, năng động cho thế hệ mới.</p>
+            <div class="social-links">
+                <a href="#" class="social-icon">FB</a>
+                <a href="#" class="social-icon">IG</a>
+                <a href="#" class="social-icon">TW</a>
+                <a href="#" class="social-icon">YT</a>
+            </div>
+        </div>
+        <div class="footer-section">
+            <h3>Liên kết nhanh</h3>
+            <ul>
+                <li><a href="#">Chính sách đổi trả</a></li>
+                <li><a href="#">Hướng dẫn mua hàng</a></li>
+                <li><a href="#">Câu hỏi thường gặp</a></li>
+                <li><a href="#">Liên hệ</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h3>Thông tin liên hệ</h3>
+            <p>Email: thekirik@gmailgmail.com</p>
+            <p>Hotline: 0394 786 578</p>
+            <p>Địa chỉ: 30/4 Thống Nhất, Quận 1, TP. Hồ Chí Minh</p>
+        </div>
+        <div class="footer-section newsletter">
+            <h3>Đăng ký nhận tin</h3>
+            <p>Nhận ưu đãi và thông tin mới nhất!</p>
+            <input type="email" placeholder="Enter your email">
+            <button class="newsletter-button">Đăng ký</button>
+        </div>
+        <!-- Thêm phần Hình thức thanh toán -->
+        <div class="footer-section payment-methods">
+            <h3>Hình thức thanh toán</h3>
+            <div class="payment-icons">
+                <i class="fab fa-cc-visa payment-icon"></i>
+                <i class="fab fa-cc-mastercard payment-icon"></i>
+                <i class="fab fa-paypal payment-icon"></i>
+                <i class="fas fa-truck payment-icon"></i>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2025 The Kirik Shop. All rights reserved.</p>
+    </div>
+</footer>
+
+<script th:src="@{/js/login.js}"></script>
+</body>
+</html>
